@@ -4,6 +4,14 @@
   "private": true,
   "type": "module",
   "description": "Sua vida, no seu ritmo. Rotina, saúde e gestão em um espaço local-first.",
-  "engines": {"node": ">=22"},
-  "scripts": {"dev": "node scripts/serve.mjs", "start": "node scripts/serve.mjs", "build": "node scripts/build.mjs", "test": "node --test tests/*.test.mjs", "check": "node --check web/app.js && node --check web/domain.js"}
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "node scripts/serve.mjs",
+    "start": "node scripts/serve.mjs",
+    "build": "node scripts/build.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "check": "node --check web/app.js && node --check web/domain.js && node --check web/assistant.js && node --check scripts/coarena.mjs && node --check scripts/server.mjs && node --check scripts/serve.mjs"
+  }
 }

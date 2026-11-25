@@ -1,6 +1,6 @@
 # Arquitetura
 
-MyRotine 0.1 é um aplicativo web local-first em português, sem dependências de runtime e sem backend. Funciona em hospedagem estática e em localhost. Não é um serviço multiusuário de produção.
+MyRotine 0.1 é um aplicativo web local-first em português, sem dependências externas de runtime, com backend Node opcional para IA. Funciona em hospedagem estática e em localhost. Não é um serviço multiusuário de produção.
 
 ## Estrutura
 
@@ -38,3 +38,9 @@ Empresas têm identificador, nome e CNPJ. Os dígitos verificadores são validad
 Antes de receber dados reais de vários usuários: autenticação e autorização por proprietário, banco de dados com isolamento entre usuários, política de retenção/exclusão, criptografia e gestão de chaves, auditoria, backups com restauração testada, fila de lembretes com idempotência, consentimento de canais e revisão de privacidade. Não conectar o localStorage a um banco público sem essas etapas.
 
 A camada de domínio é independente da UI; o adaptador de persistência pode ser substituído por uma API. A curadoria de saúde precisa de revisão clínica formal, versionamento e processo editorial antes de ampliar para orientações personalizadas.
+
+## Assistente Coarena
+
+`web/assistant.js` envia somente mensagens digitadas para `/api/ai/chat`. O backend `scripts/server.mjs` serve o app e usa o adaptador `scripts/coarena.mjs`; a chave vem de `COARENA_API_KEY`, nunca do cliente. O modelo padrão é `gpt-6-luna`. Feedback usa `/api/ai/feedback` e só aceita IDs gerados na mesma sessão. Respostas de IA são renderizadas como texto escapado.
+
+Sessões são cookies HttpOnly/SameSite=Strict com validade de uma hora; IDs de respostas e limites ficam em memória. Não há gravação de conversas no servidor. O service worker ignora `/api/`. O servidor escuta apenas loopback e valida Host/Origin; não é um serviço público autenticado. A conta do provedor também aplica seus próprios limites. O build estático não inclui o servidor ou segredos.
