@@ -60,7 +60,7 @@ Publique o conteúdo de `dist/` em uma hospedagem estática com HTTPS. Os caminh
 
 O workflow **Publish Pages** está preparado para execução manual. Para usá-lo, configure **Settings → Pages → Source: GitHub Actions**, depois execute o workflow em **Actions**. Ele não habilita Pages sozinho. A publicação não vem com backend nem sincronização.
 
-Para instalar como app, use o menu de instalação do navegador, quando disponível. O manifesto e o service worker permitem uso offline após a primeira visita bem-sucedida. A instalação e as notificações dependem do navegador e do sistema operacional.
+Para instalar como app, use o menu de instalação do navegador, quando disponível. O manifesto e o service worker permitem uso offline após a primeira visita bem-sucedida (o assistente exige internet). A instalação e as notificações dependem do navegador e do sistema operacional.
 
 </details>
 
@@ -117,7 +117,7 @@ A marca foi criada para este projeto com geração de imagem; os tamanhos de fav
 
 ## Privacidade e limites
 
-- Os dados ficam **neste navegador**. Não há conta, servidor, telemetria ou sincronização entre dispositivos.
+- Os dados ficam **neste navegador**. Não há conta, telemetria ou sincronização entre dispositivos. O assistente opcional usa um servidor local e envia à Coarena somente as mensagens digitadas.
 - O armazenamento e o backup não têm criptografia própria. Não use como cofre ou prontuário.
 - Não cadastre senhas, número completo de cartão ou CVV.
 - Limpar o navegador pode apagar os registros. Faça backups.
@@ -141,3 +141,19 @@ Os testes cobrem calendário, meses curtos, ano bissexto, dinheiro em centavos, 
 ---
 
 <div align="center"><strong>Organizar não é preencher cada minuto.<br>É abrir espaço para o que importa.</strong><br><br>Um projeto de <a href="https://github.com/brunnojob">Brunno</a>.</div>
+
+## Assistente opcional com Coarena
+
+O assistente ajuda a organizar prioridades e metas usando `gpt-6-luna`. Cada envio é uma pergunta independente; ele não lê seus registros nem cria compromissos. Somente o texto digitado é enviado à Coarena. Conversas ficam na memória da página, sem inclusão no backup. As respostas podem ser avaliadas como **Útil** ou **Não ajudou**; clicar novamente remove a avaliação.
+
+Para usar no seu computador, com Node.js 22 ou superior:
+
+1. Copie `.env.example` para `.env` na raiz do projeto.
+2. Preencha `COARENA_API_KEY` em `.env` com sua chave, sem os sinais `<` e `>`.
+3. Execute `npm start` e abra `http://localhost:3000`.
+
+`COARENA_MODEL` permite trocar o modelo pelo ID listado em <https://coarena.ai/api/v1/models>. Verifique disponibilidade e limites na sua conta; não há troca automática para outro modelo nem compra de créditos. A integração usa a base OpenAI `https://coarena.ai/api/v1`, com `/chat/completions` e `/feedback`.
+
+A chave fica exclusivamente no processo Node. `.env` está ignorado pelo Git e o build copia somente `web/`. Nunca coloque a chave em código do navegador ou em arquivos de publicação.
+
+**GitHub Pages continua sendo uma demonstração estática:** sem backend, a área de IA mostra indisponibilidade e as demais funções seguem operando. O servidor incluído é pessoal, restrito a `127.0.0.1`, com validação de origem, limite por sessão e avaliação vinculada à resposta daquela sessão. Reiniciar o servidor expira as sessões. Para publicar IA para vários usuários, implemente primeiro autenticação, autorização e cotas por usuário; não exponha este servidor por proxy/túnel como serviço público.
